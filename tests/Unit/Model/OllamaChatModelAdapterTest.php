@@ -27,7 +27,7 @@ use ModelflowAi\PromptTemplate\Chat\AIChatMessageRoleEnum;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-final class MistralChatModelAdapterTest extends TestCase
+final class OllamaChatModelAdapterTest extends TestCase
 {
     use ProphecyTrait;
 
