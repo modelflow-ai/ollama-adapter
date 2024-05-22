@@ -11,26 +11,25 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\OllamaAdapter\Embeddings;
+namespace ModelflowAi\OllamaAdapter;
 
 use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
+use ModelflowAi\Embeddings\Adapter\EmbeddingsAdapterFactoryInterface;
 use ModelflowAi\Ollama\ClientInterface;
+use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingAdapter;
 
-final readonly class OllamaEmbeddingAdapter implements EmbeddingAdapterInterface
+final readonly class OllamaEmbeddingsAdapterFactory implements EmbeddingsAdapterFactoryInterface
 {
     public function __construct(
         private ClientInterface $client,
-        private string $model = 'llama2',
     ) {
     }
 
-    public function embedText(string $text): array
+    public function createEmbeddingAdapter(array $options): EmbeddingAdapterInterface
     {
-        $response = $this->client->embeddings()->create([
-            'model' => $this->model,
-            'prompt' => $text,
-        ]);
-
-        return $response->embedding;
+        return new OllamaEmbeddingAdapter(
+            $this->client,
+            $options['model'],
+        );
     }
 }
