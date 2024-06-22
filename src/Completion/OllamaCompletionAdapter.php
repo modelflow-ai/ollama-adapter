@@ -11,17 +11,15 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\OllamaAdapter\Model;
+namespace ModelflowAi\OllamaAdapter\Completion;
 
-use ModelflowAi\Core\Model\AIModelAdapterInterface;
-use ModelflowAi\Core\Request\AICompletionRequest;
-use ModelflowAi\Core\Request\AIRequestInterface;
-use ModelflowAi\Core\Response\AICompletionResponse;
-use ModelflowAi\Core\Response\AIResponseInterface;
+use ModelflowAi\Completion\Adapter\AICompletionAdapterInterface;
+use ModelflowAi\Completion\Request\AICompletionRequest;
+use ModelflowAi\Completion\Response\AICompletionResponse;
 use ModelflowAi\Ollama\ClientInterface;
 use Webmozart\Assert\Assert;
 
-final readonly class OllamaCompletionModelAdapter implements AIModelAdapterInterface
+final readonly class OllamaCompletionAdapter implements AICompletionAdapterInterface
 {
     public function __construct(
         private ClientInterface $client,
@@ -29,13 +27,8 @@ final readonly class OllamaCompletionModelAdapter implements AIModelAdapterInter
     ) {
     }
 
-    /**
-     * @param AICompletionRequest $request
-     */
-    public function handleRequest(AIRequestInterface $request): AIResponseInterface
+    public function handleRequest(AICompletionRequest $request): AICompletionResponse
     {
-        Assert::isInstanceOf($request, AICompletionRequest::class);
-
         /** @var "json"|null $format */
         $format = $request->getOption('format');
         Assert::inArray($format, [null, 'json'], \sprintf('Invalid format "%s" given.', $format));

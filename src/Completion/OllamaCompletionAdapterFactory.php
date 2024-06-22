@@ -11,23 +11,22 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\OllamaAdapter;
+namespace ModelflowAi\OllamaAdapter\Completion;
 
-use ModelflowAi\Embeddings\Adapter\EmbeddingAdapterInterface;
-use ModelflowAi\Embeddings\Adapter\EmbeddingsAdapterFactoryInterface;
+use ModelflowAi\Completion\Adapter\AICompletionAdapterFactoryInterface;
+use ModelflowAi\Completion\Adapter\AICompletionAdapterInterface;
 use ModelflowAi\Ollama\ClientInterface;
-use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingAdapter;
 
-final readonly class OllamaEmbeddingsAdapterFactory implements EmbeddingsAdapterFactoryInterface
+final readonly class OllamaCompletionAdapterFactory implements AICompletionAdapterFactoryInterface
 {
     public function __construct(
         private ClientInterface $client,
     ) {
     }
 
-    public function createEmbeddingAdapter(array $options): EmbeddingAdapterInterface
+    public function createCompletionAdapter(array $options): AICompletionAdapterInterface
     {
-        return new OllamaEmbeddingAdapter(
+        return new OllamaCompletionAdapter(
             $this->client,
             $options['model'],
         );

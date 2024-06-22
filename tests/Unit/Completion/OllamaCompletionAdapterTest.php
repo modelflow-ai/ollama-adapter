@@ -11,20 +11,20 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\OllamaAdapter\Tests\Unit\Model;
+namespace ModelflowAi\OllamaAdapter\Tests\Unit\Completion;
 
 use ModelflowAi\ApiClient\Responses\MetaInformation;
-use ModelflowAi\Core\Request\AICompletionRequest;
-use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
-use ModelflowAi\Core\Response\AICompletionResponse;
+use ModelflowAi\Completion\Request\AICompletionRequest;
+use ModelflowAi\Completion\Response\AICompletionResponse;
+use ModelflowAi\DecisionTree\Criteria\CriteriaCollection;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\Ollama\Resources\CompletionInterface;
 use ModelflowAi\Ollama\Responses\Completion\CreateResponse;
-use ModelflowAi\OllamaAdapter\Model\OllamaCompletionModelAdapter;
+use ModelflowAi\OllamaAdapter\Completion\OllamaCompletionAdapter;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-final class OllamaCompletionModelAdapterTest extends TestCase
+final class OllamaCompletionAdapterTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -51,9 +51,9 @@ final class OllamaCompletionModelAdapterTest extends TestCase
             'eval_duration' => 5_981_849_000,
         ], MetaInformation::from([])));
 
-        $request = new AICompletionRequest('Prompt message', new AIRequestCriteriaCollection(), [], fn () => null);
+        $request = new AICompletionRequest('Prompt message', new CriteriaCollection(), [], fn () => null);
 
-        $adapter = new OllamaCompletionModelAdapter($client->reveal());
+        $adapter = new OllamaCompletionAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
 
         $this->assertInstanceOf(AICompletionResponse::class, $result);
@@ -84,9 +84,9 @@ final class OllamaCompletionModelAdapterTest extends TestCase
             'eval_duration' => 5_981_849_000,
         ], MetaInformation::from([])));
 
-        $request = new AICompletionRequest('Prompt message', new AIRequestCriteriaCollection(), ['format' => 'json'], fn () => null);
+        $request = new AICompletionRequest('Prompt message', new CriteriaCollection(), ['format' => 'json'], fn () => null);
 
-        $adapter = new OllamaCompletionModelAdapter($client->reveal());
+        $adapter = new OllamaCompletionAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
 
         $this->assertInstanceOf(AICompletionResponse::class, $result);

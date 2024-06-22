@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\OllamaAdapter\Tests\Unit;
+namespace ModelflowAi\OllamaAdapter\Tests\Unit\Completion;
 
 use ModelflowAi\Ollama\ClientInterface;
-use ModelflowAi\OllamaAdapter\Model\OllamaCompletionModelAdapter;
-use ModelflowAi\OllamaAdapter\OllamaCompletionAdapterFactory;
+use ModelflowAi\OllamaAdapter\Completion\OllamaCompletionAdapter;
+use ModelflowAi\OllamaAdapter\Completion\OllamaCompletionAdapterFactory;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -35,6 +35,6 @@ class OllamaCompletionAdapterFactoryTest extends TestCase
             'functions' => true,
             'priority' => 0,
         ]);
-        $this->assertInstanceOf(OllamaCompletionModelAdapter::class, $adapter);
+        $this->assertInstanceOf(OllamaCompletionAdapter::class, $adapter);
     }
 }

@@ -11,21 +11,19 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\OllamaAdapter\Model;
+namespace ModelflowAi\OllamaAdapter\Chat;
 
-use ModelflowAi\Core\Model\AIModelAdapterInterface;
-use ModelflowAi\Core\Request\AIChatRequest;
-use ModelflowAi\Core\Request\AIRequestInterface;
-use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
-use ModelflowAi\Core\Response\AIChatResponse;
-use ModelflowAi\Core\Response\AIChatResponseMessage;
-use ModelflowAi\Core\Response\AIChatResponseStream;
-use ModelflowAi\Core\Response\AIResponseInterface;
+use ModelflowAi\Chat\Adapter\AIChatAdapterInterface;
+use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
+use ModelflowAi\Chat\Response\AIChatResponse;
+use ModelflowAi\Chat\Response\AIChatResponseMessage;
+use ModelflowAi\Chat\Response\AIChatResponseStream;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\Ollama\Responses\Chat\CreateStreamedResponse;
 use Webmozart\Assert\Assert;
 
-final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
+final readonly class OllamaChatAdapter implements AIChatAdapterInterface
 {
     public function __construct(
         private ClientInterface $client,
@@ -33,13 +31,8 @@ final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
     ) {
     }
 
-    /**
-     * @param AIChatRequest $request
-     */
-    public function handleRequest(AIRequestInterface $request): AIResponseInterface
+    public function handleRequest(AIChatRequest $request): AIChatResponse
     {
-        Assert::isInstanceOf($request, AIChatRequest::class);
-
         /** @var "json"|null $format */
         $format = $request->getOption('format');
         Assert::inArray($format, [null, 'json'], \sprintf('Invalid format "%s" given.', $format));
@@ -70,7 +63,7 @@ final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
      *     format?: "json",
      * } $parameters
      */
-    protected function create(AIChatRequest $request, array $parameters): AIResponseInterface
+    protected function create(AIChatRequest $request, array $parameters): AIChatResponse
     {
         $response = $this->client->chat()->create($parameters);
 
@@ -93,7 +86,7 @@ final readonly class OllamaChatModelAdapter implements AIModelAdapterInterface
      *     format?: "json",
      * } $parameters
      */
-    protected function createStreamed(AIChatRequest $request, array $parameters): AIResponseInterface
+    protected function createStreamed(AIChatRequest $request, array $parameters): AIChatResponse
     {
         $responses = $this->client->chat()->createStreamed($parameters);
 

@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\OllamaAdapter\Tests\Unit;
+namespace ModelflowAi\OllamaAdapter\Tests\Unit\Embeddings;
 
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingAdapter;
-use ModelflowAi\OllamaAdapter\OllamaEmbeddingsAdapterFactory;
+use ModelflowAi\OllamaAdapter\Embeddings\OllamaEmbeddingsAdapterFactory;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 

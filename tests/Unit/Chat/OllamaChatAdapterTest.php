@@ -11,25 +11,25 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ModelflowAi\OllamaAdapter\Tests\Unit\Model;
+namespace ModelflowAi\OllamaAdapter\Tests\Unit\Chat;
 
 use ModelflowAi\ApiClient\Responses\MetaInformation;
-use ModelflowAi\Core\Request\AIChatMessageCollection;
-use ModelflowAi\Core\Request\AIChatRequest;
-use ModelflowAi\Core\Request\Criteria\AIRequestCriteriaCollection;
-use ModelflowAi\Core\Request\Message\AIChatMessage;
-use ModelflowAi\Core\Request\Message\AIChatMessageRoleEnum;
-use ModelflowAi\Core\Response\AIChatResponse;
-use ModelflowAi\Core\Response\AIChatResponseStream;
+use ModelflowAi\Chat\Request\AIChatMessageCollection;
+use ModelflowAi\Chat\Request\AIChatRequest;
+use ModelflowAi\Chat\Request\Message\AIChatMessage;
+use ModelflowAi\Chat\Request\Message\AIChatMessageRoleEnum;
+use ModelflowAi\Chat\Response\AIChatResponse;
+use ModelflowAi\Chat\Response\AIChatResponseStream;
+use ModelflowAi\DecisionTree\Criteria\CriteriaCollection;
 use ModelflowAi\Ollama\ClientInterface;
 use ModelflowAi\Ollama\Resources\ChatInterface;
 use ModelflowAi\Ollama\Responses\Chat\CreateResponse;
 use ModelflowAi\Ollama\Responses\Chat\CreateStreamedResponse;
-use ModelflowAi\OllamaAdapter\Model\OllamaChatModelAdapter;
+use ModelflowAi\OllamaAdapter\Chat\OllamaChatAdapter;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-final class OllamaChatModelAdapterTest extends TestCase
+final class OllamaChatAdapterTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -66,9 +66,9 @@ final class OllamaChatModelAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new AIRequestCriteriaCollection(), [], [], [], fn () => null);
+        ), new CriteriaCollection(), [], [], [], fn () => null);
 
-        $adapter = new OllamaChatModelAdapter($client->reveal());
+        $adapter = new OllamaChatAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
 
         $this->assertInstanceOf(AIChatResponse::class, $result);
@@ -110,9 +110,9 @@ final class OllamaChatModelAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new AIRequestCriteriaCollection(), [], [], ['format' => 'json'], fn () => null);
+        ), new CriteriaCollection(), [], [], ['format' => 'json'], fn () => null);
 
-        $adapter = new OllamaChatModelAdapter($client->reveal());
+        $adapter = new OllamaChatAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
 
         $this->assertInstanceOf(AIChatResponse::class, $result);
@@ -157,9 +157,9 @@ final class OllamaChatModelAdapterTest extends TestCase
             new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'System message'),
             new AIChatMessage(AIChatMessageRoleEnum::USER, 'User message'),
             new AIChatMessage(AIChatMessageRoleEnum::ASSISTANT, 'Assistant message'),
-        ), new AIRequestCriteriaCollection(), [], [], ['format' => 'json', 'streamed' => true], fn () => null);
+        ), new CriteriaCollection(), [], [], ['format' => 'json', 'streamed' => true], fn () => null);
 
-        $adapter = new OllamaChatModelAdapter($client->reveal());
+        $adapter = new OllamaChatAdapter($client->reveal());
         $result = $adapter->handleRequest($request);
 
         $this->assertInstanceOf(AIChatResponseStream::class, $result);
