@@ -22,19 +22,14 @@ use ModelflowAi\PromptTemplate\ChatPromptTemplate;
 /** @var AIChatRequestHandlerInterface $handler */
 $handler = require_once __DIR__ . '/bootstrap.php';
 
-$response = $handler->createStreamedRequest(
+$response = $handler->createRequest(
     ...ChatPromptTemplate::create(
         new AIChatMessage(AIChatMessageRoleEnum::SYSTEM, 'You are an {feeling} bot'),
         new AIChatMessage(AIChatMessageRoleEnum::USER, 'Hello {where}!'),
     )->format(['where' => 'world', 'feeling' => 'angry']),
 )
     ->addCriteria(PrivacyCriteria::HIGH)
+    ->asJson()
     ->execute();
 
-foreach ($response->getMessageStream() as $index => $message) {
-    if (0 === $index) {
-        echo $message->role->value . ': ';
-    }
-
-    echo $message->content;
-}
+echo \sprintf('%s: %s', $response->getMessage()->role->value, $response->getMessage()->content);
